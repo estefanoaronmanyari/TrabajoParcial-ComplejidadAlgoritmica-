@@ -5,13 +5,13 @@ import random
 import heapq
 from collections import deque
 
-# --- CONFIGURACIÓN DE PANTALLA Y MAPA ---
-COLS, ROWS = 60, 45
+# --- CONFIGURACIÓN DE PANTALLA Y MAPA (70 x 50) ---
+COLS, ROWS = 70, 50
 CELL_SIZE = 16
-GRID_WIDTH = COLS * CELL_SIZE            # 960 px
+GRID_WIDTH = COLS * CELL_SIZE            # 1120 px
 PANEL_WIDTH = 340                        # 340 px
-SCREEN_WIDTH = GRID_WIDTH + PANEL_WIDTH  # 1300 px
-SCREEN_HEIGHT = ROWS * CELL_SIZE         # 720 px
+SCREEN_WIDTH = GRID_WIDTH + PANEL_WIDTH  # 1460 px
+SCREEN_HEIGHT = ROWS * CELL_SIZE         # 800 px
 
 # --- PALETA DE COLORES (Dark Mode Neón) ---
 COLOR_BG_PANEL = (20, 22, 28)       # Fondo del panel lateral
@@ -191,7 +191,7 @@ class PathfindingVisualizer:
 
         self.grid = [[0 for _ in range(COLS)] for _ in range(ROWS)]
         self.start = (3, 3)
-        self.goal = (40, 56)
+        self.goal = (45, 66)  # (fila, col) -> (y: 45, x: 66)
         self.npcs = []
 
         self.algoritmo_id = 3
@@ -212,16 +212,16 @@ class PathfindingVisualizer:
         self.ejecutar_algoritmo()
 
     def generar_muros_defecto(self):
-        for c in range(6, 25): self.grid[8][c] = 1
-        for r in range(8, 38): self.grid[r][17] = 1
-        for r in range(4, 25): self.grid[r][34] = 1
-        for c in range(31, 51): self.grid[20][c] = 1
-        for r in range(6, 28): self.grid[r][50] = 1
-        for c in range(25, 30): self.grid[26][c] = 1
-        for c in range(38, 55): self.grid[32][c] = 1
-        for c in range(39, 45): self.grid[36][c] = 1
-        for r in range(35, 44): self.grid[r][58] = 1
-        for c in range(39, 45): self.grid[43][c] = 1
+        for c in range(6, 30): self.grid[8][c] = 1
+        for r in range(8, 42): self.grid[r][20] = 1
+        for r in range(4, 30): self.grid[r][40] = 1
+        for c in range(35, 60): self.grid[22][c] = 1
+        for r in range(8, 35): self.grid[r][60] = 1
+        for c in range(30, 36): self.grid[30][c] = 1
+        for c in range(45, 65): self.grid[36][c] = 1
+        for c in range(45, 53): self.grid[40][c] = 1
+        for r in range(38, 48): self.grid[r][68] = 1
+        for c in range(45, 53): self.grid[47][c] = 1
 
     def ejecutar_algoritmo(self):
         t0 = time.perf_counter()
@@ -353,9 +353,12 @@ class PathfindingVisualizer:
 
         total_celdas = ROWS * COLS
         obstaculos = sum(row.count(1) for row in self.grid)
+        transitables = total_celdas - obstaculos
+
         map_info = [
             f"Tamaño: {COLS} x {ROWS}",
             f"Celdas totales: {total_celdas}",
+            f"Nodos transitables: {transitables}",
             f"Obstáculos: {obstaculos}",
             f"NPCs activos: {len(self.npcs)}"
         ]
